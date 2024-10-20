@@ -164,3 +164,11 @@ After you create this file, just commit this change. I am assuming you are still
 ```bash
 git add .github/workflows/ruff.yml && git commit -m "Add Ruff GitHub Action" && git push origin linter-issues
 ```
+
+If you check the open PR on this repo, you will see the issues detected as annotations in the code. 
+
+![Ruff check fix](/docs/6.png)
+
+![Ruff check fix](/docs/7.png)
+
+![Ruff check fix](/docs/8.png)
