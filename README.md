@@ -1,12 +1,25 @@
 # Using Ruff as Linter and Formatter in Odoo Projects
-This project shows how to use Ruff as a linter and formatter tool, specifically for Odoo projects.
 
-## What's Ruff?
+- [Using Ruff as Linter and Formatter in Odoo Projects](#using-ruff-as-linter-and-formatter-in-odoo-projects)
+    - [Overview](#overview)
+    - [Installation](#installation)
+  - [Ruff linter](#ruff-linter)
+    - [Understanding this Repo](#understanding-this-repo)
+    - [Ruff check for first time](#ruff-check-for-first-time)
+    - [Output Formats](#output-formats)
+    - [Include folders](#include-folders)
+    - [Add configuration file](#add-configuration-file)
+    - [Fixing linter issues 🚀](#fixing-linter-issues-)
+    - [Cool feature with GitHub 🤩 🚀](#cool-feature-with-github--)
+  - [Ruff formatter](#ruff-formatter)
+  - [Final words](#final-words)
+
+### Overview
+This repository shows how to use Ruff as a linter and formatter tool, specifically for Odoo projects.
+
 Ruff is an extremely fast Python linter and code formatter, written in Rust. The official documentation explains it better than I could, so here is the link: [Ruff](https://docs.astral.sh/ruff/)
 
-## Can I use it in my Odoo projects?
-**Yes you can**, and it's very simple. Continue reading to find out how.
-
+### Installation
 First, let's install Ruff using pip. You can create a `venv` and install it there if you don't want to interfere with your global Python packages, but I won't do that.
 
 Install it using pip3:
@@ -25,7 +38,9 @@ ruff --version
 ```
 **Note**: If you encounter any issues, you can refer to this section of the official documentation: [Ruff Installation](https://docs.astral.sh/ruff/installation/)
 
-## Using this repo to test Ruff
+
+## Ruff linter
+### Understanding this Repo
 
 First of all, clone this repo and check out the `linter-issues` branch. Trust me blindly, I will explain just below 😎
 ```bash
@@ -49,6 +64,7 @@ The **folder structure** is very simple:
 
 **Note:** What those addons in the repo do is not relevant. It's just Python code with a lot of styling issues 😁
 
+### Ruff check for first time
 So, let's try Ruff for the first time. I hope you're still on the **linter-issues** branch, in the root folder **odoo-ruff**.
 ```bash
 ruff check
@@ -62,6 +78,7 @@ Basically from the output you can indetify:
 - failing files, like `addons/custom-addons/custom_partner/__init__.py`
 - error codes, like `F401`, `F841`, etc.
 
+### Output Formats
 We can modify the previous command to show a more concise output. Just add the `--output-format concise` option.
 ```bash
 ruff check --output-format concise
@@ -74,6 +91,7 @@ And now you have a simpler output, easier to read, like in this image:
 **Note**: This is the complete list of available `--output-format` options. Test them and find the one you like the most. For me `concise` its enough. However, later in this documentation I will show you how to use a cool feature of Ruff when working with Github 😎
 * `concise`, `full`, `json`, `json-lines`, `junit`, `grouped`, `github`, `gitlab`, `pylint`, `rdjson`, `azure`, `sarif`
 
+### Include folders
 The previous command was executed in the root folder `odoo-ruff`, and it checked all the addons, including the external-addons. As mentioned before, I don't want to do that. Let's modify the previous command to include only the folder I want to check. Don't worry, later we will add all these options in a **configuration file**; but for now, let's continue in the command line. 
 
 ```bash
@@ -92,6 +110,7 @@ It shows some issues in the `__init__.py` file. But wait 🤔, this is the `Odoo
 
 ![Ruff check init file](/docs/4.png)
 
+### Add configuration file
 I want to say Ruff to ignore those files because I know what I am doing 😄. Lets stop playing with the terminal and we better add a `config file`.
 
 Create a file called `ruff.toml` in the root folder `odoo-ruff` and add the following content:
@@ -121,7 +140,7 @@ ruff check
 ```
 **Note**: I found that the structure of the file is related to the `filename` and also to the `IDE` you are using. I am not 100% sure on this point, and I wasn't able to fully understand it. What I can ensure is that using `VS Code` and the `ruff.toml` filename works as described in this documentation.
 
-### Let's fix the issues now 🚀
+### Fixing linter issues 🚀
 Ok, now its time to fix our issues. Actually `ruff will do it for us`. Lets run the following command:
 ```bash
 ruff check --fix
@@ -133,7 +152,7 @@ Which shows us that ``23`` errors were found, `20` were fixed and `3` are still 
 
 As you can imagine, Ruff cannot fix all of them, but we now have a smaller list of files to check.  Now its your turn. Fix them until the `ruff check` command gives you a clean output `All checks passed!`.
 
-## Cool feature with GitHub 🤩 🚀
+### Cool feature with GitHub 🤩 🚀
 Until here you should be able to detect and fix any linter issues with Ruff. But, what if we forget doing this before pushing our code to the repository? 🤔
 
 Ruff can be integrated with Github defining a github action to run the linter with the options we just set. The output can be adjusted and Ruff structures its output so that GitHub Actions can display annotations directly in the pull request or code review interface. 
@@ -172,3 +191,28 @@ If you check the open PR on this repo, you will see the issues detected as annot
 ![Ruff check fix](/docs/7.png)
 
 ![Ruff check fix](/docs/8.png)
+
+## Ruff formatter
+The Ruff formatter is an extremely fast Python code formatter designed as a drop-in replacement for Black, available as part of the ruff CLI via ruff format. More information can be found here: [Ruff Formatter](https://docs.astral.sh/ruff/formatter/)
+
+Personally myself, I am not quite happy with formatters, specially when in an Odoo code it changes this
+```pyton
+lines = [(Command.create({'name': 'Test'}))]
+```
+
+by this
+```python
+lines = [
+  (
+    Command.create(
+      {
+        "name": "Test"
+      }
+    )
+  )
+]
+```
+or things like that. Anyway, you are free to explore this option and find if you like the results in your Odoo code 😁
+
+## Final words
+I hope you find this documentation useful. I have tried to explain the steps I followed to use Ruff in my Odoo projects. I am not an expert in Ruff, but I have found it very useful and fast. I am sure you will find it useful too.
